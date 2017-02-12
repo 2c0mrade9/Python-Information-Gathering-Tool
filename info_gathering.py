@@ -10,14 +10,12 @@ def printUsage():
     Usage:
       python file.py [options]
             option 1 - project name<br>
-            option 2 - host address (http://www.mywebsite.com) -> should be a valid address
+            option 2 - host address (http://www.mywebsite.com)
             option 3 - information gathering style [Ping (p) or Host (h)]
-            option 4 - nmap options [-F; -T4 -F, -T4 -A -v, -O] --> Any valid one nmap options apply
-      
-      Simple Command
-      python filename full_website_address
-      
+            option 4 - nmap options [-F; -T4 -F, -T4 -A -v, -O] --> or any nmap options
       Example:
+      python info_gathering.py newproject
+      
       python info_gathering.py first-project http://www.mywebsite.com h -F
          """)
 
@@ -261,10 +259,20 @@ def main_call():
   Whois Information and Download the robots.txt file.""")
     lineBreak("*", 70)
 
+    #help list names
+    help_list = ['h', '-h', '--h', 'help', '-help', '--help']
+    
     try:
         #check if the user provided a name using the command line interface
         if len(sys.argv) > 1:
-            project_name = sys.argv[1]
+            #check the very first variable if its help or -help
+            if sys.argv[1] in help_list:
+                #print out the help window
+                printUsage()
+                #close the session
+                sys.exit(1)
+            else:
+                project_name = sys.argv[1]
         else:
             #get the name of the project
             project_name = input("Please enter the project name: ")
