@@ -11,7 +11,7 @@ You must supply a valid domain name
 
 #USAGE 
 Usage:<br>
-      python file.py [options]<br>
+      python file.py [options]<br> 
       option 1 - project name<br>
       option 2 - host address (http://www.mywebsite.com) -> should be a valid address<br>
       option 3 - information gathering style [Ping (p) or Host (h)]<br>
