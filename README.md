@@ -10,12 +10,12 @@ def   1. domain_name<br>
 You must supply a valid domain name
 
 #USAGE 
-Usage:
-      python file.py [options]
-            option 1 - project name<br>
-            option 2 - host address (http://www.mywebsite.com) -> should be a valid address
-            option 3 - information gathering style [Ping (p) or Host (h)]
-            option 4 - nmap options [-F; -T4 -F, -T4 -A -v, -O] --> Any valid one nmap options apply
+Usage:<br>
+      python file.py [options]<br>
+      option 1 - project name<br>
+      option 2 - host address (http://www.mywebsite.com) -> should be a valid address<br>
+      option 3 - information gathering style [Ping (p) or Host (h)]<br>
+      option 4 - nmap options [-F; -T4 -F, -T4 -A -v, -O] --> Any valid one nmap options apply<br>
       
       Simple Command
       python filename full_website_address
