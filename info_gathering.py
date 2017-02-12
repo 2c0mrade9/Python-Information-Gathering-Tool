@@ -12,11 +12,14 @@ def printUsage():
             option 1 - project name<br>
             option 2 - host address (http://www.mywebsite.com)
             option 3 - information gathering style [Ping (p) or Host (h)]
-            option 4 - nmap options [-F; -T4 -F, -T4 -A -v, -O] --> or any nmap options
-      Example:
+            option 4 to 7 - nmap options [-F; -T4 -F, -T4 -A -v, -O]
+            
+      Example of Sample Commands
+      python info_gathering.py help --> (_this displays the usage information_)
+      (__*help options*__ _h_, _-h_, _--h_, _help_, _-help_, _--help_)
       python info_gathering.py newproject
       
-      python info_gathering.py first-project http://www.mywebsite.com h -F
+      python info_gathering.py first-project http://www.mywebsite.com h -F -v
          """)
 
 def lineBreak(symbol, multiply):
@@ -105,7 +108,7 @@ def get_nmap(ip):
     options = ''
     
     if len(sys.argv) > 4:
-        options = re.sub('[\',[\]]','', str(sys.argv[4:]))
+        options = re.sub('[\',[\]]','', str(sys.argv[4:7]))
     else:
         #get the user response
         user_response = str(input("What nmap options do you wish to use? Default (d) Help (h) "))
