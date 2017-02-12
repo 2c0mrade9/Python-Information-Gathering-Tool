@@ -1,4 +1,4 @@
-import os, time, io, sys
+import os, time, io, sys, re
 from tld import get_tld
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
@@ -7,11 +7,18 @@ from urllib.error import URLError, HTTPError
 def printUsage():
     # print out how to use the programe
     print ("""
-    You must supply a valid domain name
-          Usage:
-             python filename full_website_address
-             eg.
-               python info_gathering.py http://www.mywebsite.com
+    Usage:
+      python file.py [options]
+            option 1 - project name<br>
+            option 2 - host address (http://www.mywebsite.com) -> should be a valid address
+            option 3 - information gathering style [Ping (p) or Host (h)]
+            option 4 - nmap options [-F; -T4 -F, -T4 -A -v, -O] --> Any valid one nmap options apply
+      
+      Simple Command
+      python filename full_website_address
+      
+      Example:
+      python info_gathering.py first-project http://www.mywebsite.com h -F
          """)
 
 def lineBreak(symbol, multiply):
@@ -48,8 +55,12 @@ def get_domain_name(url):
 #get the ip address of the url as submitted by the user
 def get_ip_address(url):
 
-    #ask the user what command to use
-    user_response = str(input("What command do you want to run? Ping (p) or Host (h): "))
+    #check if the user supplied it in the command line
+    if len(sys.argv) > 3:
+        user_response = sys.argv[3]
+    else:
+        #ask the user what command to use
+        user_response = str(input("What command do you want to run? Ping (p) or Host (h): "))
 
     #check if the user submitted h as response
     if user_response == 'h':
@@ -94,41 +105,46 @@ def get_ip_address(url):
 def get_nmap(ip):
     #ask the user for the options to use
     options = ''
-    user_response = str(input("What nmap options do you wish to use? Default (d) Help (h) "))
     
-    #check if the user needs help
-    if user_response == 'h':
-        print("-" * 70)
-        print("""
-[***]These are the various options that are available to you [***]
-SCAN TECHNIQUES:
-   -F: Fast Scans
-   -sU: UDP Scan
-   -sN/sF/sX: TCP Null, FIN, and Xmas scans
-   -sO: IP protocol scan
-   -b <FTP relay host>: FTP bounce scan
-PORT SPECIFICATION AND SCAN ORDERS
-   -p <port ranges>: Only scan specified ports
-       Eg: -p22; -p1-65535;
-   -r: Scan ports consecutively - don't randomize
-SERVICE / VERSION DETECTION:
-   -sV: Probe open ports to determine service / version info
-OS DETECTION:
-   -O: Enable OS detection
-OTHER SCANS
-   -A: Enable OS detection, version detection, script scanning, and traceroute
-   (This option is very cool to use)
-
-DEFAULT OPTIONS
-   -T4 -A -v
-       """)
-        print("-" * 70)
-        get_nmap(ip)
-    #check if the user wants to go for the default options
-    elif user_response == 'd':
-        options = "-T4 -A -v"
+    if len(sys.argv) > 4:
+        options = re.sub('[\',[\]]','', str(sys.argv[4:]))
     else:
-        options = user_response
+        #get the user response
+        user_response = str(input("What nmap options do you wish to use? Default (d) Help (h) "))
+        
+        #check if the user needs help
+        if user_response == 'h':
+            print("-" * 70)
+            print("""
+    [***]These are the various options that are available to you [***]
+    SCAN TECHNIQUES:
+       -F: Fast Scans
+       -sU: UDP Scan
+       -sN/sF/sX: TCP Null, FIN, and Xmas scans
+       -sO: IP protocol scan
+       -b <FTP relay host>: FTP bounce scan
+    PORT SPECIFICATION AND SCAN ORDERS
+       -p <port ranges>: Only scan specified ports
+           Eg: -p22; -p1-65535;
+       -r: Scan ports consecutively - don't randomize
+    SERVICE / VERSION DETECTION:
+       -sV: Probe open ports to determine service / version info
+    OS DETECTION:
+       -O: Enable OS detection
+    OTHER SCANS
+       -A: Enable OS detection, version detection, script scanning, and traceroute
+       (This option is very cool to use)
+
+    DEFAULT OPTIONS
+       -T4 -A -v
+           """)
+            print("-" * 70)
+            get_nmap(ip)
+        #check if the user wants to go for the default options
+        elif user_response == 'd':
+            options = "-T4 -A -v"
+        else:
+            options = user_response
         
     print("[*] Running NMAP scan on the website... [***]: nmap " + options + " " + ip)
 
@@ -247,7 +263,7 @@ def main_call():
 
     try:
         #check if the user provided a name using the command line interface
-        if len(sys.argv) == 2:
+        if len(sys.argv) > 1:
             project_name = sys.argv[1]
         else:
             #get the name of the project
@@ -262,7 +278,7 @@ def main_call():
             main_call()
 
         #check if the user provided a website address in the command line interface
-        if len(sys.argv) == 3:
+        if len(sys.argv) > 2:
             project_url = sys.argv[2]
         else:    
             #get the url to fetch the information from
