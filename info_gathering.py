@@ -1,8 +1,13 @@
-import os, time, io, sys, re
-from tld import get_tld
-from urllib.request import Request, urlopen
-from urllib.error import URLError, HTTPError
-
+try:
+    import os, time, io, sys, re
+    from tld import get_tld
+    from urllib.request import Request, urlopen
+    from urllib.error import URLError, HTTPError
+except ImportError.name:  # py 3.5 if 3.6 could have use ModuleNotFound
+    print('Make sure modules are installed correctly! ')
+except RuntimeError:
+    print('Something went wrong! Module Import Runtime Error')
+    
 #function to print out the usage
 def printUsage():
     # print out how to use the programe
